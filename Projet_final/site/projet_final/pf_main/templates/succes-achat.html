@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Commande réussie - Merci pour votre achat{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-center mb-5">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                </div>
+                <h1 class="mb-3">Merci pour votre achat !</h1>
+                <p class="lead text-muted">Votre commande a été confirmée avec succès</p>
+                <div class="alert alert-success d-inline-block">
+                    <i class="bi bi-envelope-check"></i> Un email de confirmation a été envoyé à votre adresse
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-receipt"></i> Détails de la commande</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Numéro de commande :</strong> <span class="text-primary">{{ order.order_serial }}</span></p>
+                            <p><strong>Date :</strong> {{ order.date|date:"d F Y à H:i" }}</p>
+                            <p><strong>Statut :</strong> <span class="badge bg-success">Confirmée</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> 
+                                <strong>Commande confirmée</strong><br>
+                                <small>Un email de confirmation avec tous les détails a été envoyé à votre adresse.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mb-3">Produits commandés</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produit</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-end">Prix unitaire</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.images.all %}
+                                            <div class="me-3" style="width: 60px; height: 60px; overflow: hidden; border-radius: 4px; flex-shrink: 0; background-color: #f8f9fa;">
+                                                <img src="{{ item.product.images.first.url.url }}" 
+                                                     alt="{{ item.product.name }}" 
+                                                     class="w-100 h-100" 
+                                                     style="object-fit: cover;">
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                                <strong>{{ item.product.name }}</strong>
+                                                {% if item.promo %}
+                                                <br>
+                                                <small class="text-danger">
+                                                    <i class="bi bi-tag-fill"></i> Promotion appliquée (-{{ item.discount_percentage }}%)
+                                                </small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-end">${{ item.price|floatformat:2 }}</td>
+                                    <td class="text-end">${{ item.total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6 ms-auto">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-end"><strong>Sous-total :</strong></td>
+                                    <td class="text-end">${{ subtotal|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end"><strong>TPS (5%) :</strong></td>
+                                    <td class="text-end">${{ tps|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end"><strong>TVQ (9.975%) :</strong></td>
+                                    <td class="text-end">${{ tvq|floatformat:2 }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td class="text-end"><h5>Total payé :</h5></td>
+                                    <td class="text-end"><h5 class="text-success">${{ total|floatformat:2 }}</h5></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-info-circle"></i> Prochaines étapes</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check2 text-success"></i> Vous recevrez un email de confirmation avec tous les détails
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check2 text-success"></i> Votre commande sera traitée dans les prochaines 24 heures
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check2 text-success"></i> Vous recevrez un numéro de suivi dès l'expédition
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-check2 text-success"></i> Pour toute question, contactez-nous à <a href="mailto:boutiquenba@cchic.ca">contact@grocerybasket.ca</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'accueil' %}" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-house-door"></i> Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bi-check-circle-fill {
+    animation: scaleIn 0.5s ease-in-out;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-50">
+
+    <h2 class="text-primary mb-4">Mon compte</h2>
+
+    <!-- Infos personnelles -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h5 class="mb-3">Informations personnelles</h5>
+
+            <div class="info-field">
+                <strong>Nom d’utilisateur :</strong> {{ user.username }}
+            </div>
+
+            <div class="info-field">
+                <strong>Prénom :</strong> {{ user.first_name }}
+            </div>
+
+            <div class="info-field">
+                <strong>Nom :</strong> {{ user.last_name }}
+            </div>
+
+            <div class="info-field">
+                <strong>Adresse électronique :</strong> {{ user.email }}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Adresse -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h5 class="mb-3">Adresse</h5>
+
+            {% if user.address %}
+                <div class="info-field">
+                    {{ user.address.number }} {{ user.address.street_name }}
+                </div>
+
+                <div class="info-field">
+                    {{ user.address.city }}
+                </div>
+
+                <div class="info-field">
+                    {{ user.address.postal_code }}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune adresse enregistrée.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2">
+        <a href="{% url 'modifier_compte' %}" class="btn btn-primary shine px-20">
+            Modifier mon compte
+        </a>
+
+        <a href="{% url 'modifier_mdp' %}" class="btn btn-outline-danger px-20">
+            Changer le mot de passe
+        </a>
+    </div>
+
+</div>
+{% endblock %}

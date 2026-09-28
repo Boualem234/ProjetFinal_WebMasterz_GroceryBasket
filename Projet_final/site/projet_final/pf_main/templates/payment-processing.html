@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Traitement du paiement...{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center p-5">
+                <div class="spinner-border text-primary mb-4" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                
+                <h2 class="mb-3">Traitement en cours...</h2>
+                <p class="text-muted mb-4">
+                    Nous traitons votre paiement PayPal. Veuillez patienter quelques instants.
+                </p>
+                
+                <div class="alert alert-info">
+                    <strong>Numéro de commande :</strong> {{ order.order_serial }}
+                </div>
+                
+                <p class="small text-muted">
+                    Vous recevrez un email de confirmation une fois le paiement validé.
+                </p>
+                
+                <div class="mt-4">
+                    <a href="{% url 'accueil' %}" class="btn btn-outline-primary">
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-refresh pour vérifier si le paiement est confirmé
+setTimeout(function() {
+    window.location.href = "{% url 'succes_achat' order.id %}";
+}, 10000); // Redirection après 10 secondes
+</script>
+{% endblock %}

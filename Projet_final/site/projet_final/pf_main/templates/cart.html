@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Panier - eCommerce{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- Breadcrumb -->
+<div class="mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mon Panier</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Cart Section -->
+<section class="mt-5 mb-5">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-lg-12">
+            <div class="p-5">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0 text-black text-uppercase">Mon Panier</h1>
+                    {% if cart_items %}
+                        <h5 class="mb-0 fw-bold border py-2 px-4 text-muted">{{ cart_count }} Article{% if cart_count > 1 %}s{% endif %}</h5>
+                    {% endif %}
+                </div>
+                <hr class="my-4">
+                
+                {% if cart_items %}
+                <div class="table-responsive cart-container">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Produit</th>
+                            <th scope="col">Prix unitaire</th>
+                            <th scope="col">Quantité</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <th scope="row" class="align-middle" width="20%">
+                                <a href="{% url 'remove_from_cart' item.product.pk %}" class="text-danger me-3 remove-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Supprimer">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <a href="{% url 'consulter' item.product.pk %}">
+                                    <img src="{{ item.product.images.first.url.url }}" class="img-fluid rounded-3" width="100" alt="{{ item.product.name }}">
+                                </a>
+                            </th>
+                            <td class="align-middle" width="30%">
+                                <a href="{% url 'consulter' item.product.pk %}" class="text-black">{{ item.product.name }}</a>
+                                {% if item.has_promotion %}
+                                    <br><small class="text-success">Promotion: -{{ item.discount_percentage }}%</small>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle" width="15%">
+                                {% if item.has_promotion %}
+                                    <span class="fw-bold text-dark">{{ item.unit_price|floatformat:2 }} $</span>
+                                    <br><small class="text-muted"><s>{{ item.product.price|floatformat:2 }} $</s></small>
+                                {% else %}
+                                    {{ item.unit_price|floatformat:2 }} $
+                                {% endif %}
+                            </td>
+                            <td class="align-middle" width="20%">
+                                <form method="post" action="{% url 'update_cart' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ item.product.pk }}">
+                                    <div class="qty-container">
+                                        <button class="qty-btn-minus count-decreament" type="button"><i class="bi bi-dash"></i></button>
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="input-qty input-cornered cart-quantity" data-product-id="{{ item.product.pk }}"/>
+                                        <button class="qty-btn-plus count-increament" type="button"><i class="bi bi-plus"></i></button>
+                                    </div>
+                                </form>
+                                <small class="text-muted d-block mt-1">Stock: {{ item.product.stock }}</small>
+                            </td>
+                            <td class="align-middle fw-bold" width="15%">{{ item.item_total|floatformat:2 }} $</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-md-8">
+                        <div class="d-flex gap-3">
+                            <a href="{% url 'accueil' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Résumé de la commande</h5>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td>Sous-total</td>
+                                        <td class="text-end">{{ subtotal|floatformat:2 }} $</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TPS (5%)</td>
+                                        <td class="text-end">{{ tps|floatformat:2 }} $</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TVQ (9.975%)</td>
+                                        <td class="text-end">{{ tvq|floatformat:2 }} $</td>
+                                    </tr>
+                                    <tr class="border-top">
+                                        <td class="fw-bold fs-5">Total</td>
+                                        <td class="text-end fw-bold fs-5">{{ total|floatformat:2 }} $</td>
+                                    </tr>
+                                </table>
+                                <div class="checkout-btn mt-4">
+                                    <a href="{% url 'payment' %}" class="btn btn-primary btn-lg w-100">Procéder au paiement</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc;"></i>
+                    <h3 class="mt-3">Votre panier est vide</h3>
+                    <p class="text-muted">Ajoutez des produits pour commencer vos achats</p>
+                    <a href="{% url 'accueil' %}" class="btn btn-primary mt-3">
+                        <i class="bi bi-shop me-2"></i>Découvrir nos produits
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Soumettre automatiquement le formulaire quand la quantité change
+document.querySelectorAll('.cart-quantity').forEach(input => {
+    let timeout;
+    
+    input.addEventListener('change', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            this.closest('form').submit();
+        }, 500);
+    });
+    
+    // Pour les boutons +/-
+    const form = input.closest('form');
+    const minusBtn = form.querySelector('.count-decreament');
+    const plusBtn = form.querySelector('.count-increament');
+    
+    if (minusBtn) {
+        minusBtn.addEventListener('click', function() {
+            setTimeout(() => form.submit(), 500);
+        });
+    }
+    
+    if (plusBtn) {
+        plusBtn.addEventListener('click', function() {
+            setTimeout(() => form.submit(), 500);
+        });
+    }
+});
+</script>
+
+{% endblock %}

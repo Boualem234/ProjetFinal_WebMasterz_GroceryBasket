@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+{% load static %}
+
+    <!-- Banner Slider -->
+        <div class="banner py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                    <div class="owl-carousel owl-theme banner-slider">
+                        <div> <img src="{% static 'img/banner/1.png' %}" class="rounded" alt="eCommerce Template"> </div>
+                        <div> <img src="{% static 'img/banner/2.png' %}" class="rounded" alt="eCommerce Template"> </div>
+                    </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                        <div class="mb-4 shine">
+                            <img src="{% static 'img/banner/5.png' %}"  class="rounded w-100" alt="eCommerce Template">
+                        </div>
+                        <div class="text-center shine">
+                            <img src="{% static 'img/banner/6.png' %}" class="rounded w-100" alt="eCommerce Template">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- End Banner Slider -->  
+
+    <!-- Categories Section -->
+    <div class="category-list mt-50">
+        <div class="container">
+            <div class="category-container">
+                <div class="owl-carousel category-slider">
+                    {% if all_categories %}
+                        {% for category in all_categories %}
+                    <div class="item">                        
+                        <div>
+                            <a href="{% url 'categorie' category.id %}">
+
+                                {% if category.images.all %}
+                                <img src="{{ category.images.first.url.url }}" class="img-fluid" alt="{{ category.name }}"> 
+                                {% else %}
+                                <img src="{% static 'img/category/1.png' %}" class="img-fluid" alt="{{ category.name }}"> 
+                                {% endif %}
+                                <span class="d-block category-title">{{ category.name }}</span>
+                            </a>
+                        </div>
+                    </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="text-center py-5 w-100">
+                        <p class="text-muted">Aucune catégorie disponible</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Categories Section -->
+
+    <!-- Offer Section -->
+    <div class="offer-section mt-50">
+    <div class="container">
+            <div class="offer-container">
+            <div class="shine">
+                <img src="{% static 'img/banner/3.png' %}" class="w-100" alt="eCommerce Template">
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- End Offer Section -->
+
+    <!-- Product Section -->
+    <div class="product mt-100">
+        <div class="container">
+            <div class="d-block d-sm-block d-md-flex d-lg-flex justify-content-between">
+                <h2 class="product-section-title">Nos produits</h2>
+                <div class="d-flex justify-content-center justify-content-md-end">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-lastest-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-lastest" type="button" role="tab" aria-controls="pills-lastest"
+                                aria-selected="true">Récents</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-popularity-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-popularity" type="button" role="tab"
+                                aria-controls="pills-popularity" aria-selected="false">En vedette</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-top-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-top" type="button" role="tab" aria-controls="pills-top"
+                                aria-selected="false">En promotion</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content" id="pills-tabContent">
+                <!-- Latest Products Tab -->
+                <div class="tab-pane fade show active" id="pills-lastest" role="tabpanel"  aria-labelledby="pills-lastest-tab" tabindex="0">
+                    {% if recent_products_with_promo %}
+                        <div class="product">
+                            <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-sm-2 row-cols-md-2 mt-1">
+                                {% for item in recent_products_with_promo %}
+                                    {% with product=item.product %}
+                                    <div class="col">
+                                        <div class="card product-card">
+                                            <a href="{% url 'consulter' product.pk %}">
+                                                <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-first" alt="{{ product.name }}">
+                                                {% if product.images.all|length > 1 %}
+                                                    <img src="{{ product.images.all.1.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% else %}
+                                                    <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% endif %}
+                                            </a>
+                                            <div class="card-body pt-0">
+                                                {% if item.has_promotion and item.discount_percentage %}
+                                                    <span class="discount-badge">-{{ item.discount_percentage }}%</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-price px-3 pb-2">
+                                                <h5 class="card-title"><a href="{% url 'consulter' product.pk %}">{{ product.name }}</a></h5>
+                                                <p class="text-muted mb-2" style="font-size: 0.875rem;">{{ product.category.name }}</p>
+                                                <div class="mb-2">
+                                                  {% if item.has_promotion and item.discounted_price %}
+                                                    <span class="fw-bold text-dark">{{ item.discounted_price|floatformat:2 }} $</span>
+                                                    <span class="text-muted"><s>{{ product.price|floatformat:2 }}</s></span>
+                                                    <span><small class="fs-6 ms-2 text-danger">{{ item.discount_percentage }}% de rabais</small></span>
+                                                  {% else %}
+                                                    <span class="fw-bold text-dark">{{ product.price|floatformat:2 }} $</span>
+                                                  {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="product-footer">
+                                                <form method="post" action="{% url 'cart' %}" class="m-0">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="add" value="{{ product.pk }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-50 mx-3 mb-3 btn-cart"><i class="bi bi-bag me-2"></i>Ajouter au panier</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <p class="text-muted">Aucun produit récent</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Featured Products Tab -->
+                <div class="tab-pane fade" id="pills-popularity" role="tabpanel" aria-labelledby="pills-popularity-tab" tabindex="0">
+                    {% if featured_products_with_promo %}
+                        <div class="product">
+                            <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-sm-2 row-cols-md-2 mt-1">
+                                {% for item in featured_products_with_promo %}
+                                    {% with product=item.product %}
+                                    <div class="col">
+                                        <div class="card product-card">
+                                            <a href="{% url 'consulter' product.pk %}">
+                                                <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-first" alt="{{ product.name }}">
+                                                {% if product.images.all|length > 1 %}
+                                                    <img src="{{ product.images.all.1.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% else %}
+                                                    <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% endif %}
+                                            </a>
+                                            <div class="card-body pt-0">
+                                                {% if item.has_promotion and item.discount_percentage %}
+                                                    <span class="discount-badge">-{{ item.discount_percentage }}%</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-price px-3 pb-2">
+                                                <h5 class="card-title"><a href="{% url 'consulter' product.pk %}">{{ product.name }}</a></h5>
+                                                <p class="text-muted mb-2" style="font-size: 0.875rem;">{{ product.category.name }}</p>
+                                                <div class="mb-2">
+                                                  {% if item.has_promotion and item.discounted_price %}
+                                                    <span class="fw-bold text-dark">{{ item.discounted_price|floatformat:2 }} $</span>
+                                                    <span class="text-muted"><s>{{ product.price|floatformat:2 }}</s></span>
+                                                    <span><small class="fs-6 ms-2 text-danger">{{ item.discount_percentage }}% de rabais</small></span>
+                                                  {% else %}
+                                                    <span class="fw-bold text-dark">{{ product.price|floatformat:2 }} $</span>
+                                                  {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="product-footer">
+                                                <form method="post" action="{% url 'cart' %}" class="m-0">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="add" value="{{ product.pk }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-50 mx-3 mb-3 btn-cart"><i class="bi bi-bag me-2"></i>Ajouter au panier</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <p class="text-muted">Aucun produit</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Special/Promotional Products Tab -->
+                <div class="tab-pane fade" id="pills-top" role="tabpanel" aria-labelledby="pills-top-tab" tabindex="0">
+                    {% if promotional_products_with_promo %}
+                        <div class="product">
+                            <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-sm-2 row-cols-md-2 mt-1">
+                                {% for item in promotional_products_with_promo %}
+                                    {% with product=item.product %}
+                                    <div class="col">
+                                        <div class="card product-card">
+                                            <a href="{% url 'consulter' product.pk %}">
+                                                <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-first" alt="{{ product.name }}">
+                                                {% if product.images.all|length > 1 %}
+                                                    <img src="{{ product.images.all.1.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% else %}
+                                                    <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                                {% endif %}
+                                            </a>
+                                            <div class="card-body pt-0">
+                                                {% if item.has_promotion and item.discount_percentage %}
+                                                    <span class="discount-badge">-{{ item.discount_percentage }}%</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-price px-3 pb-2">
+                                                <h5 class="card-title"><a href="{% url 'consulter' product.pk %}">{{ product.name }}</a></h5>
+                                                <p class="text-muted mb-2" style="font-size: 0.875rem;">{{ product.category.name }}</p>
+                                                <div class="mb-2">
+                                                  {% if item.has_promotion and item.discounted_price %}
+                                                    <span class="fw-bold text-dark">{{ item.discounted_price|floatformat:2 }} $</span>
+                                                    <span class="text-muted"><s>{{ product.price|floatformat:2 }}</s></span>
+                                                    <span><small class="fs-6 ms-2 text-danger">{{ item.discount_percentage }}% de rabais</small></span>
+                                                  {% else %}
+                                                    <span class="fw-bold text-dark">{{ product.price|floatformat:2 }} $</span>
+                                                  {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="product-footer">
+                                                <form method="post" action="{% url 'cart' %}" class="m-0">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="add" value="{{ product.pk }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-50 mx-3 mb-3 btn-cart"><i class="bi bi-bag me-2"></i>Ajouter au panier</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <p class="text-muted">Aucun produit en promotion</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'rechercher' %}" class="btn btn-primary btn-lg px-5 py-3 btn-cart text-white shadow" style="border-radius: 50px; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>Voir tous nos produits
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Product Section End -->
+
+
+    <!-- Offer Section -->
+    <div class="section-offer mt-100">
+    <div class="container">
+        <div class="section-offer-container shine" style="background-image: url({% static 'img/banner/4.png' %});">
+            <div class="section-offer-info">
+                <p class="offer-info-dis">EXTRA -10% DE RÉDUCTION AVEC LE CODE : QUEEN001</p>
+                <p class="offer-info-title">Économisez 20% sur tous les produits GroceryBasket</p>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Offer Section -->
+
+    <!-- Feature Section -->
+    <div class="feature-section mt-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="white-bg">
+                <div class="row">
+                <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                    <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="{% static 'img/icon/delivery-truck.png' %}" class="w-100"  alt="truck Icon">
+                    </div>
+                    <div class="feature-info pt-3 ps-2">
+                        <h4>Livraison gratuite</h4>
+                        <p>Sur les commandes de plus de&nbsp;<strong>50$.</strong></p>
+                    </div>
+                    </div>
+                </div>
+                <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                    <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="{% static 'img/icon/loan.png' %}" class="w-100"  alt="truck Icon">
+                    </div>
+                    <div class="feature-info pt-3 ps-2">
+                        <h4>Garantie de remboursement</h4>
+                        <p>Remboursement sous 7 jours.</p>
+                    </div>
+                    </div>
+                </div>
+                <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                    <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="{% static 'img/icon/credit-card.png' %}" class="w-100"  alt="truck Icon">
+                    </div>
+                    <div class="feature-info pt-3 ps-2">
+                        <h4>Paiement sécurisé</h4>
+                        <p>100% paiement sécurisé.</p>
+                    </div>
+                    </div>
+                </div>
+                <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                    <div class="feature-item">
+                    <div class="feature-icon">
+                        <img src="{% static 'img/icon/customer-service.png' %}" class="w-100"  alt="truck Icon">
+                    </div>
+                    <div class="feature-info pt-3 ps-2">
+                        <h4>Support en ligne</h4>
+                        <p>Assistance qualité garantie</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+<!-- Feature Section -->
+
+
+{% endblock %}

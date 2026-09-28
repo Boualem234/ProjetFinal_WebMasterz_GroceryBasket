@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problème de paiement</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Montserrat, sans-serif; background-color: #f4f4f4;">
+
+<table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+        <td align="center" style="padding: 40px 0;">
+
+            <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                <!-- HEADER -->
+                <tr>
+                    <td style="padding: 40px 30px; background-color: #dc3545; text-align: center;">
+                        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700;">🛒 GROCERY BASKET</h1>
+                        <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Problème avec votre paiement</p>
+                    </td>
+                </tr>
+
+                <!-- MESSAGE -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <h2 style="margin: 0 0 20px 0; color: #333; font-size: 24px; font-weight: 600;">
+                            Bonjour {{ user.first_name }},
+                        </h2>
+
+                        <p style="margin: 0 0 15px 0; color: #666; font-size: 16px; line-height: 1.6;">
+                            Nous avons rencontré un problème lors du traitement de votre paiement pour la commande <strong>{{ order.order_serial }}</strong>.
+                        </p>
+
+                        <p style="margin: 0 0 25px 0; color: #666; font-size: 16px; line-height: 1.6;">
+                            Statut du paiement : <strong style="color: #dc3545;">{{ payment_status }}</strong>
+                        </p>
+
+                        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 25px;">
+                            <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.6;">
+                                <strong>Que faire ?</strong><br>
+                                • Vérifiez que votre compte PayPal dispose de fonds suffisants<br>
+                                • Assurez-vous que vos informations de paiement sont à jour<br>
+                                • Réessayez votre commande depuis votre panier
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- CTA BUTTON -->
+                <tr>
+                    <td style="padding: 0 30px 40px 30px; text-align: center;">
+                        <a href="http://127.0.0.1:8000/cart" 
+                           style="display: inline-block; padding: 15px 40px; background-color: #81DA5B; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: 600; font-size: 16px;">
+                            Retourner au panier
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- HELP -->
+                <tr>
+                    <td style="padding: 0 30px 40px 30px; border-top: 1px solid #eee;">
+                        <p style="margin: 20px 0 0 0; color: #999; font-size: 14px; line-height: 1.6; text-align: center;">
+                            Besoin d'aide ? Contactez notre service client à <a href="mailto:webmasterz932@gmail.com" style="color: #81DA5B;">webmasterz932@gmail.com</a>
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr>
+                    <td style="padding: 30px; background-color: #f9f9f9; text-align: center;">
+                        <p style="margin: 0 0 10px 0; color: #999; font-size: 12px;">
+                            © 2025 Grocery Basket. Tous droits réservés.
+                        </p>
+                        <p style="margin: 0; color: #999; font-size: 12px;">
+                            Cet email a été envoyé automatiquement, merci de ne pas y répondre.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - Produits{% endblock %}
+
+{% block content %}
+{% load static %}
+
+    <div class="mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="mb-4">
+            {% if category.images.first %}
+                <img src="{{ category.images.first.url.url }}" class="img-fluid rounded" alt="{{ category.name }}" style="max-height: 300px; width: 100%; object-fit: cover;">
+            {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3">{{ category.name }}</h1>
+                {% if category.description %}
+                    <p class="text-muted mb-0">{{ category.description }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <span class="text-muted">{{ products_with_promo|length }} produit{% if products_with_promo|length > 1 %}s{% endif %}</span>
+            </div>
+        </div>
+
+        {% if products_with_promo %}
+            <div class="product">
+                <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-sm-2 row-cols-md-2">
+                    {% for item in products_with_promo %}
+                        {% with product=item.product %}
+                        <div class="col">
+                            <div class="card product-card">
+                                <a href="{% url 'consulter' product.pk %}">
+                                    <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-first" alt="{{ product.name }}">
+                                    {% if product.images.all|length > 1 %}
+                                        <img src="{{ product.images.all.1.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                    {% else %}
+                                        <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                                    {% endif %}
+                                </a>
+                                <div class="card-body pt-0">
+                                    {% if item.has_promotion and item.discount_percentage %}
+                                        <span class="discount-badge">-{{ item.discount_percentage }}%</span>
+                                    {% endif %}
+                                </div>
+                                <div class="product-price px-3 pb-2">
+                                    <h5 class="card-title"><a href="{% url 'consulter' product.pk %}">{{ product.name }}</a></h5>
+                                    <p class="text-muted mb-2" style="font-size: 0.875rem;">{{ product.category.name }}</p>
+                                    <div class="mb-2">
+                                      {% if item.has_promotion and item.discounted_price %}
+                                        <span class="fw-bold text-dark">{{ item.discounted_price|floatformat:2 }} $</span>
+                                        <span class="text-muted"><s>{{ product.price|floatformat:2 }}</s></span>
+                                        <span><small class="fs-6 ms-2 text-danger">{{ item.discount_percentage }}% Off</small></span>
+                                      {% else %}
+                                        <span class="fw-bold text-dark">{{ product.price|floatformat:2 }} $</span>
+                                      {% endif %}
+                                    </div>
+                                </div>
+                                <div class="product-footer">
+                                    <form method="post" action="{% url 'cart' %}" class="m-0">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="add" value="{{ product.pk }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="d-block rounded py-2 text-center border mx-3 mb-3 btn-cart">Ajouter au panier</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">Aucun produit disponible dans cette catégorie.</div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

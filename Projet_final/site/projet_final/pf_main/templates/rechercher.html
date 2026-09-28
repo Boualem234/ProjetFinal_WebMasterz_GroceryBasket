@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mt-4">
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-12">
+                <!-- breadcrumb -->                        
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Résultats de recherche</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <h1>Recherche de produits</h1>
+
+    <form action="{% url 'rechercher' %}" method="get">
+
+    <!-- 🔍 Barre de recherche -->
+    <div class="input-group mb-3">
+        <input 
+            name="q"
+            value="{{ request.GET.q }}"
+            class="form-control py-10 px-20"
+            type="text"
+            placeholder="Rechercher un produit..."
+        >
+        <button type="submit" class="btn btn-primary bg-gradient">
+            Search
+        </button>
+    </div>
+
+    <!-- Bouton pour collapse -->
+    <div class="mb-3">
+        <button class="btn btn-outline-primary w-100"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#filtersCollapse">
+            Filtres avancés
+        </button>
+    </div>
+
+    <!-- Collapse -->
+    <div class="collapse mb-4 {% if selected_category or promo_only %}show{% endif %}" id="filtersCollapse">
+        <div class="card card-body">
+
+            <!-- Catégorie -->
+            <div class="mb-3">
+                <label class="form-label">Catégorie</label>
+                <select name="category_id" class="form-select">
+                    <option value="">Toutes les catégories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if request.GET.category_id == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Promo -->
+            <div class="form-check mb-3">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox"
+                    name="promo"
+                    value="1"
+                    id="promoFilter"
+                    {% if request.GET.promo %}checked{% endif %}
+                >
+                <label class="form-check-label" for="promoFilter">
+                    En promotion
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Appliquer les filtres
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<hr>
+
+<h3>Résultats :</h3>
+
+{% if products_with_promo %}
+    <div class="product">
+        <div class="row g-4 row-cols-xl-4 row-cols-lg-3 row-cols-2 row-cols-sm-2 row-cols-md-2">
+            {% for item in products_with_promo %}
+                {% with product=item.product %}
+                <div class="col">
+                    <div class="card product-card">
+                        <a href="{% url 'consulter' product.pk %}">
+                            <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-first" alt="{{ product.name }}">
+                            {% if product.images.all|length > 1 %}
+                                <img src="{{ product.images.all.1.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="{{ product.images.all.0.url.url }}" class="card-img-top image-second" alt="{{ product.name }}">
+                            {% endif %}
+                        </a>
+
+                        <div class="card-body pt-0">
+                            {% if item.has_promotion and item.discount_percentage %}
+                                <span class="discount-badge">-{{ item.discount_percentage }}%</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-price px-3 pb-2">
+                            <h5 class="card-title">
+                                <a href="{% url 'consulter' product.pk %}">{{ product.name }}</a>
+                            </h5>
+                            <p class="text-muted mb-2" style="font-size: 0.875rem;">{{ product.category.name }}</p>
+
+                            <div class="mb-2">
+                              {% if item.has_promotion and item.discounted_price %}
+                                <span class="fw-bold text-dark">{{ item.discounted_price|floatformat:2 }} $</span>
+                                <span class="text-muted"><s>{{ product.price|floatformat:2 }}</s></span>
+                                <span><small class="fs-6 ms-2 text-danger">{{ item.discount_percentage }}% Off</small></span>
+                              {% else %}
+                                <span class="fw-bold text-dark">{{ product.price|floatformat:2 }} $</span>
+                              {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="product-footer">
+                            <form method="post" action="{% url 'cart' %}" class="m-0">
+                                {% csrf_token %}
+                                <input type="hidden" name="add" value="{{ product.pk }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="d-block rounded py-2 text-center border mx-3 mb-3 btn-cart">
+                                    Ajouter au panier
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <nav aria-label="Pagination de recherche">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_category %}category_id={{ selected_category }}&{% endif %}{% if promo_only %}promo=1&{% endif %}page={{ page_obj.previous_page_number }}">
+                            <i class="bi bi-chevron-left"></i> Précédent
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link"><i class="bi bi-chevron-left"></i> Précédent</span>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_category %}category_id={{ selected_category }}&{% endif %}{% if promo_only %}promo=1&{% endif %}page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% if query %}q={{ query }}&{% endif %}{% if selected_category %}category_id={{ selected_category }}&{% endif %}{% if promo_only %}promo=1&{% endif %}page={{ page_obj.next_page_number }}">
+                            Suivant <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Suivant <i class="bi bi-chevron-right"></i></span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="text-center text-muted mb-4">
+                <small>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }} ({{ page_obj.paginator.count }} produit{{ page_obj.paginator.count|pluralize }})</small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% else %}
+    <div class="container">
+        <div class="text-center py-5">
+            <p class="text-muted">Aucun produit trouvé.</p>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

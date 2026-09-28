@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue chez GROCERY BASKET</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Montserrat, sans-serif; background-color: #f4f4f4;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    
+                    <!-- En-tête -->
+                    <tr>
+                        <td style="padding: 40px 30px; background-color: #81DA5B; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; font-family: Montserrat, sans-serif;">🛒 GROCERY BASKET</h1>
+                            <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px;">Produits frais livrés à votre porte</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Message de bienvenue -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h2 style="margin: 0 0 20px 0; color: #333333; font-size: 24px; font-weight: 600; font-family: Montserrat, sans-serif;">Bienvenue chez GROCERY BASKET!</h2>
+                            <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.6; font-family: Montserrat, sans-serif;">
+                                Bonjour <strong>{{ user.first_name }}</strong>,
+                            </p>
+                            <p style="margin: 0 0 15px 0; color: #666666; font-size: 16px; line-height: 1.6; font-family: Montserrat, sans-serif;">
+                                Merci de vous être inscrit chez GROCERY BASKET! Nous sommes ravis de vous compter parmi notre communauté d'amateurs de produits frais.
+                            </p>
+                            <p style="margin: 0 0 25px 0; color: #666666; font-size: 16px; line-height: 1.6; font-family: Montserrat, sans-serif;">
+                                Votre compte a été créé avec succès et vous pouvez maintenant commencer à magasiner les produits d'épicerie les plus frais en ligne.
+                            </p>                        
+                        </td>
+                    </tr>
+                    
+                    <!-- Détails du compte -->
+                    <tr>
+                        <td style="padding: 0 30px 30px 30px;">
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f9f9f9; border-radius: 4px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <h3 style="margin: 0 0 15px 0; color: #333333; font-size: 18px; font-weight: 600; font-family: Montserrat, sans-serif;">Détails de votre compte</h3>
+                                        <p style="margin: 0 0 8px 0; color: #666666; font-size: 14px; font-family: Montserrat, sans-serif;">
+                                            <strong>Courriel:</strong> {{ user.email }}
+                                        </p>
+                                        <p style="margin: 0; color: #666666; font-size: 14px; font-family: Montserrat, sans-serif;">
+                                            <strong>Date d'inscription:</strong> {{ user.date_joined|date:"d F Y" }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Avantages -->
+                    <tr>
+                        <td style="padding: 0 30px 30px 30px;">
+                            <h3 style="margin: 0 0 20px 0; color: #333333; font-size: 18px; font-weight: 600; font-family: Montserrat, sans-serif;">Ce que vous pouvez faire maintenant:</h3>
+                            <table role="presentation" style="width: 100%;">
+                                <tr>
+                                    <td style="padding: 10px 0;">
+                                        <span style="color: #86AE34; font-size: 18px; font-weight: bold;">✓</span>
+                                        <span style="color: #666666; font-size: 14px; margin-left: 10px; font-family: Montserrat, sans-serif;">Parcourir des centaines de produits frais</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0;">
+                                        <span style="color: #86AE34; font-size: 18px; font-weight: bold;">✓</span>
+                                        <span style="color: #666666; font-size: 14px; margin-left: 10px; font-family: Montserrat, sans-serif;">Enregistrer vos articles préférés pour les commander rapidement</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Offre spéciale -->
+                    <tr>
+                        <td style="padding: 0 30px 40px 30px;">
+                            <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #fff3e0; border-radius: 4px; border: 2px dashed #ff9800;">
+                                <tr>
+                                    <td style="padding: 20px; text-align: center;">
+                                        <p style="margin: 0 0 10px 0; color: #ff9800; font-size: 18px; font-weight: bold; font-family: Montserrat, sans-serif;">🎉 Offre de bienvenue!</p>
+                                        <p style="margin: 0 0 15px 0; color: #666666; font-size: 14px; font-family: Montserrat, sans-serif;">Utilisez le code <strong style="color: #ff9800; font-size: 16px;">BIENVENUE15</strong> pour obtenir 15% de rabais sur votre première commande</p>
+                                        <p style="margin: 0; color: #999999; font-size: 12px; font-family: Montserrat, sans-serif;">Valide pendant 30 jours à partir de l'inscription</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Pied de page -->
+                    <tr>
+                        <td style="padding: 30px; background-color: #f9f9f9; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px; text-align: center; font-family: Montserrat, sans-serif;">
+                                Besoin d'aide? Contactez-nous à <a href="mailto:{{ contact_email }}" style="color: #86AE34; text-decoration: none;">{{ contact_email }}</a>
+                            </p>
+                            <p style="margin: 0; color: #999999; font-size: 11px; text-align: center; font-family: Montserrat, sans-serif;">
+                                © {% now "Y" %} GROCERY BASKET. Tous droits réservés.<br>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

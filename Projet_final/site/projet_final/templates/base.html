@@ -1,0 +1,301 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}GroceryBasket{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/nice-select/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/nouislider/nouislider.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugin/slick/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+     <!-- Header Section Start -->
+      <header class="navigation shadow-sm border-bottom">
+        <!-- Navbar Sticky -->
+        <div class="navbar-sticky">
+            <div class="navbar navbar-middle navbar-expand-lg mt-lg-3 ">
+                <div class="container">
+                    <!-- Logo -->
+                    <a class="navbar-brand flex-shrink-0 " href="{% url 'accueil' %}">
+                        <img src="{% static 'img/logo.png' %}" class="logo main-logo" alt="eCommerce HTML Template">
+                    </a>
+                    <!-- Logo -->
+                    <!-- Search -->
+                    <div class="input-group d-none d-lg-flex me-5">
+                        <form action="{% url 'rechercher' %}" method="get" class="input-group d-none d-lg-flex me-5">
+                            <input 
+                                name="q" 
+                                class="form-control py-10 px-20" 
+                                type="text" 
+                                placeholder="Rechercher un produit..."
+                            >
+                            <button type="submit" class="btn btn-primary bg-gradient d-none d-lg-block">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <!-- Search -->
+                    <!-- Navbar Actions -->
+                    <div class="list-inline d-flex gap-3">
+                        <!-- Cart -->
+                        <div class="list-inline-item">
+                            <a class="text-muted position-relative" href="{% url 'cart' %}">
+                                <i class="bi bi-cart"></i>
+                                {% if cart_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                    {{ cart_count }}
+                                    <span class="visually-hidden">articles dans le panier</span>
+                                </span>
+                                {% endif %}
+                            </a>
+                        </div>
+            
+                        <!-- User Account Desktop -->
+                        <div class="list-inline-item d-none d-lg-block">
+                            <div class="dropdown">
+                                <a class="text-muted text-decoration-none dropdown-toggle d-flex align-items-center gap-2" 
+                                   href="#" role="button" id="userDropdownDesktop" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-user"></i>
+                                    {% if user.is_authenticated %}
+                                        <span>{{ user.first_name|default:user.username }}</span>
+                                    {% else %}
+                                        <span>Mon Compte</span>
+                                    {% endif %}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdownDesktop">
+                                    {% if user.is_authenticated %}
+                                        <li>
+                                            <div class="d-flex align-items-center gap-2 px-3 py-2">
+                                                <i class="fa-solid fa-user-circle" style="font-size: 1.5rem; color: var(--btn-bg);"></i>
+                                                <div>
+                                                    <p class="mb-0 fw-bold" style="font-size: 14px;">{{ user.first_name|default:user.username }}</p>
+                                                    <small class="text-muted">Connecté</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li><hr class="dropdown-divider my-1"></li>
+                                        <li><a class="dropdown-item" href="{% url 'compte' %}"><i class="fa-solid fa-gear me-2"></i> Détails de votre compte</a></li>
+                                        <li><hr class="dropdown-divider my-1"></li>
+                                        <li><a class="dropdown-item text-danger" href="{% url 'deconnexion' %}"><i class="fa-solid fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+                                    {% else %}
+                                        <li><a class="dropdown-item" href="{% url 'connexion' %}"><i class="fa-solid fa-sign-in-alt me-2"></i> Connexion</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'inscription' %}"><i class="fa-solid fa-user-plus me-2"></i> S'inscrire</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+            
+                        <!-- Mobile Toggle -->
+                        <div class="list-inline-item d-inline-block d-lg-none">
+                            <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#navbar-default" aria-controls="navbar-default"
+                                aria-label="Toggle navigation">
+                                <i class="bi bi-text-indent-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Navbar Actions -->
+                </div>
+            </div>
+            
+            <!-- Navbar -->
+            <!-- Navs -->
+            <nav class="navbar navbar-expand-lg navbar-light navbar-default py-lg-2 py-md-0 py-0 py-sm-0  bg-color mt-lg-3" aria-label="Offcanvas navbar large">
+                <div class="container">
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="navbar-default" aria-labelledby="navbar-defaultLabel">
+                        <div class="offcanvas-header pb-1">
+                            <a href="{% url 'accueil' %}"><img src="{% static 'img/logo.png' %}" class="logo" alt="eCommerce HTML Template"></a>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <!-- User Menu Mobile -->
+                            {% if not user.is_authenticated %}
+                            <div class="d-block d-lg-none mb-4 pb-3 border-bottom">
+                                <div class="d-grid gap-2">
+                                    <a class="btn btn-primary btn-sm" href="{% url 'connexion' %}"><i class="fa-solid fa-sign-in-alt me-2"></i> Connexion</a>
+                                    <a class="btn btn-success btn-sm" href="{% url 'inscription' %}"><i class="fa-solid fa-user-plus me-2"></i> S'inscrire</a>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="d-block d-lg-none mb-4 pb-3 border-bottom">
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <i class="fa-solid fa-user-circle" style="font-size: 2rem; color: var(--btn-bg);"></i>
+                                    <div>
+                                        <p class="mb-0 fw-bold">{{ user.first_name|default:user.username }}</p>
+                                        <small class="text-muted">Connecté</small>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <a class="btn btn-outline-primary btn-sm" href="{% url 'compte' %}"><i class="fa-solid fa-gear me-2"></i> Détails de votre compte</a>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'deconnexion' %}"><i class="fa-solid fa-sign-out-alt me-2"></i> Déconnexion</a>
+                                </div>
+                            </div>
+                            {% endif %}
+            
+                            <!-- Search Mobile -->
+                            <div class="d-block d-lg-none mb-4">
+                                <div class="input-group me-5">
+                                    <input id="searchInput" class="form-control py-10 px-20" type="text" placeholder="Rechercher des produits">
+                                    <select id="searchSelect" class="form-select flex-shrink-0" style="min-width: 13rem;">
+                                        <option value="">Toutes les catégories</option>
+                                        {% for cat in all_categories %}
+                                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="button" class="btn btn-primary bg-gradient">Rechercher</button>
+                                </div>
+                            </div>
+            
+                            <!-- Navigation Menu -->
+                            <div>
+                                <ul class="navbar-nav align-items-center">
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link" href="{% url 'accueil' %}">Accueil</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link" href="{% url 'cart' %}">Panier</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto dropdown-fullwidth">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</a>
+                                        <div class="dropdown-menu pb-0">
+                                            <div class="row p-2 p-lg-4">
+                                                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+                                                    <h6 class="text-primary ps-3">Catégories</h6>
+                                                    {% for cat in all_categories|slice:":8" %}
+                                                    <a class="dropdown-item" href="{% url 'categorie' cat.id %}">{{ cat.name }}</a>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+                                                    <h6 class="text-primary ps-3">Produits récents</h6>
+                                                    {% if recent_products %}
+                                                      {% for p in recent_products %}
+                                                      <a class="dropdown-item" href="{% url 'consulter' p.id %}">{{ p.name }}</a>
+                                                      {% endfor %}
+                                                    {% else %}
+                                                      <p class="px-3">Aucun produit récent</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link" href="{% url 'propos' %}">À propos</a>
+                                    </li>
+                                    <li class="nav-item dropdown w-100 w-lg-auto">
+                                        <a class="nav-link" href="{% url 'contacter' %}">Nous contacter</a>
+                                    </li>                                                                      
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navs -->
+            <!-- Navs -->
+        </div>
+        <!-- Navbar Sticky -->
+    </header>
+    <!-- Header Section End -->
+
+
+    <main>
+        <div class="container">
+        <div class="row">
+            <div class="col-12">
+            {% block page_messages %}
+                {% if messages %}
+                    <div class="container mt-3">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+            </div>
+        </div>
+        </div>
+    </main>
+
+
+<!-- Footer Section -->
+    <footer class="mt-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-md-0">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-12">
+                            <div class="footer_logo">
+                                <img loading="eager" fetchpriority="high" src="{% static 'img/logo.png' %}" class="logo" alt="easy shop">
+                            </div>
+                            <div class="mt-4">
+                                <p>Votre boutique en ligne de confiance au Québec. Découvrez notre sélection de produits de qualité avec livraison rapide et service client exceptionnel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-3 mb-md-0">
+                    <div class="footer_menu">
+                        <h4 class="footer_title">Informations</h4>
+                        <ul class="m-0 p-0 list-unstyled">
+                            <li><a href="{% url 'propos' %}">À propos</a></li>
+                            <li><a href="{% url 'contacter' %}">Nous contacter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer_download">
+                        <div class="row">
+                            <div class="col-lg-6 col-lg-12">
+                                <h4 class="footer_title">Contact</h4>
+                                <div class="footer_contact">
+                                    <p>
+                                        <span class="icn"><i class="bi bi-geo-alt"></i></span>
+                                        Grocery Basket <br>
+                                        534 rue Jacques-Cartier Est
+                                        Chicoutimi, QC G7H 1Z6 <br>
+                                        Québec, Canada
+                                    </p>
+                                    <p class="phn">
+                                        <span class="icn"><i class="bi bi-telephone"></i></span>
+                                        (418) 545-5011
+                                    </p>
+                                    <p class="eml">
+                                        <span class="icn"><i class="bi bi-envelope"></i></span>
+                                        contact@grocerybasket.ca
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+  <!-- Bootstrap JS -->
+        <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'plugin/nice-select/jquery.nice-select.min.js' %}"></script>
+        <script src="{% static 'plugin/nouislider/nouislider.min.js' %}"></script>
+        <script src="{% static 'plugin/slick/slick.min.js' %}"></script>
+        <script src="{% static 'js/jquery.ez-plus.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+ {% extends 'base.html' %}
+
+{% block title %}À propos - WebMasterz{% endblock %}
+
+{% block content %}
+{% load static %}
+    <main>
+        <div class="contact-section">
+            <div class="mt-4">
+                <div class="container">
+                   <div class="row">
+                      <div class="col-12">
+                         <!-- breadcrumb -->
+                         <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                               <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                               <li class="breadcrumb-item active" aria-current="page">À propos</li>
+                            </ol>
+                         </nav>
+                      </div>
+                   </div>
+                </div>
+             </div>
+            <div class="bg-gray-100 mt-5">
+                <div class="container">
+                       <div class="text-center">
+                            <h1>À propos de WebMasterz</h1>
+                            <p class="lead text-muted">Votre boutique en ligne de confiance</p>
+                       </div>
+                       
+                       <!-- Notre Histoire -->
+                       <div class="mt-100">
+                            <div class="row align-items-center">
+                                    <div class="col-lg-5 mb-4 mb-lg-0">
+                                        <div class="shine">
+                                            <img src="{% static 'img/teamwork.png' %}" class="about-img img-fluid rounded" alt="Notre équipe">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7">
+                                         <div class="about-details">
+                                             <h2 class="mb-4">Notre Histoire</h2>
+                                             <div class="about-short-des">
+                                                 <p class="mb-3">
+                                                     Fondée en 2025, <strong>WebMasterz</strong> est née de la passion de trois développeurs web du Cégep de Chicoutimi pour créer une expérience d'achat en ligne exceptionnelle. Notre mission est de rendre le commerce électronique accessible, sécurisé et agréable pour tous.
+                                                 </p>
+                                                 <p class="mb-3">
+                                                     Nous nous spécialisons dans la vente de produits de qualité avec un service client irréprochable. Notre plateforme a été conçue avec les dernières technologies web pour vous offrir une navigation fluide, des transactions sécurisées et une gestion optimale de vos commandes.
+                                                 </p>
+                                                 <p>
+                                                     Chez WebMasterz, nous croyons fermement que chaque client mérite une attention personnalisée. C'est pourquoi nous mettons tout en œuvre pour vous proposer les meilleures promotions, un catalogue varié et une livraison rapide.
+                                                 </p>
+                                             </div>
+                                         </div>
+                                    </div>
+                            </div>
+                       </div>
+
+                       <!-- Notre Équipe de Développement -->
+                       <div class="mt-100">
+                            <div class="text-center mb-5">
+                                <h2>Notre Équipe de Développement</h2>
+                                <p class="text-muted">Étudiants en programmation web au Cégep de Chicoutimi</p>
+                            </div>
+                            <div class="row g-4 justify-content-center">
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="bi bi-person-circle" style="font-size: 80px; color: #0d6efd;"></i>
+                                            </div>
+                                            <h5 class="card-title">Nicolas</h5>
+                                            <p class="text-muted mb-2"><small>Développeur Web</small></p>
+                                            <p class="card-text">
+                                                Étudiant passionné de développement web et de technologies modernes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="bi bi-person-circle" style="font-size: 80px; color: #198754;"></i>
+                                            </div>
+                                            <h5 class="card-title">Boualem</h5>
+                                            <p class="text-muted mb-2"><small>Développeur Web</small></p>
+                                            <p class="card-text">
+                                                Étudiant passionné de développement web et de technologies modernes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="bi bi-person-circle" style="font-size: 80px; color: #dc3545;"></i>
+                                            </div>
+                                            <h5 class="card-title">Ayoub</h5>
+                                            <p class="text-muted mb-2"><small>Développeur Web</small></p>
+                                            <p class="card-text">
+                                                Étudiant passionné de développement web et de technologies modernes.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                       
+                    <!-- Feature Section -->
+                    <div class="feature-section mt-100 mb-100">
+                        <div class="container">
+                            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="white-bg">
+                                <div class="row">
+                                    <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                                    <div class="feature-item">
+                                        <div class="feature-icon">
+                                            <img src="{% static 'img/icon/delivery-truck.png' %}" class="w-100"  alt="truck Icon">
+                                        </div>
+                                        <div class="feature-info pt-3 ps-2">
+                                            <h4>Livraison gratuite</h4>
+                                            <p>Sur les commandes de plus de&nbsp;<strong>50$.</strong></p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                                    <div class="feature-item">
+                                        <div class="feature-icon">
+                                            <img src="{% static 'img/icon/loan.png' %}" class="w-100"  alt="truck Icon">
+                                        </div>
+                                        <div class="feature-info pt-3 ps-2">
+                                            <h4>Garantie de remboursement</h4>
+                                            <p>Remboursement sous 7 jours.</p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                                    <div class="feature-item">
+                                        <div class="feature-icon">
+                                            <img src="{% static 'img/icon/credit-card.png' %}" class="w-100"  alt="truck Icon">
+                                        </div>
+                                        <div class="feature-info pt-3 ps-2">
+                                            <h4>Paiement sécurisé</h4>
+                                            <p>100% sécurisé.</p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="mb-20 col-12 col-sm-12 col-md-6 col-lg-3 d-flex justify-content-center">
+                                    <div class="feature-item">
+                                        <div class="feature-icon">
+                                            <img src="{% static 'img/icon/customer-service.png' %}" class="w-100"  alt="truck Icon">
+                                        </div>
+                                        <div class="feature-info pt-3 ps-2">
+                                            <h4>Support en ligne</h4>
+                                            <p>Qualité garantie des produits</p>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Feature Section -->
+                </div>
+            </div>
+        </div> 
+    </main>
+
+{% endblock %}

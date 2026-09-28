@@ -1,0 +1,116 @@
+ {% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+{% load static %}
+    <main>
+        <div class="contact-section">
+            <div class="mt-4">
+                <div class="container">
+                   <div class="row">
+                      <div class="col-12">
+                         <!-- breadcrumb -->
+                         <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                               <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                               <li class="breadcrumb-item active" aria-current="page">Contacter nous</li>
+                            </ol>
+                         </nav>
+                      </div>
+                   </div>
+                </div>
+             </div>
+              <section class="py-5 bg-gray-100 mt-5">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-xs-4 col-md-4 text-center text-md-start mb-4 mb-md-0">
+                          <div class="icon-rounded mb-4 bg-primary-light">
+                               <i class="bi bi-geo-alt icon"></i>
+                          </div>
+                          <h3 class="h5">Notre Adresse</h3>
+                          <p class="text-muted">534 Rue Jacques-Cartier E<br>Chicoutimi, G7H 1Z6<br><strong>Québec, Canada</strong></p>
+                        </div>
+
+                        <div class="col-xs-4 col-md-4 text-center text-md-start mb-4 mb-md-0">
+                          <div class="icon-rounded mb-4 bg-primary-light">
+                            <i class="bi bi-telephone icon"></i>
+                          </div>
+                          <h3 class="h5">Notre numéro de téléphone</h3>
+                          <ul class="list-unstyled text-muted">
+                              <li>+1 (418)123-4567</li>
+                            </ul>
+                        </div>
+                      </div>
+                  <div class="row mt-50">
+                    <div class="col-md-12 mb-5 mb-md-0">
+                      <form class="form" id="contact-form" method="post">
+                        {% csrf_token %}
+                        <div class="col-xs-4 col-md-4 text-center text-md-start mb-4 mb-md-0">
+                          <div class="icon-rounded mb-4 bg-primary-light d-flex align-items-center gap-3">
+                            <i class="bi bi-envelope icon row"></i>
+                            <h1 class="m-0">Écrivez-nous!</h1>
+                          </div>
+                        </div>
+                        <div class="controls">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="mb-4">
+                                <label class="form-label visually-hidden" for="name">Entrez votre prénom <span class="text-danger">*</span></label>
+                                <input class="form-control bg-light border-0 py-2" type="text" name="firstname" id="firstname" placeholder="Entrez votre prénom" required="required">
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="mb-4">
+                                <label class="form-label visually-hidden" for="surname">Entrez votre nom de famille <span class="text-danger">*</span></label>
+                                <input class="form-control bg-light border-0 py-2" type="text" name="lastname" id="lastname" placeholder="Entrez votre nom de famille" required="required">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="mb-4">
+                            <label class="form-label visually-hidden" for="email">Entrez votre adresse électronique <span class="text-danger">*</span></label>
+                            <input class="form-control bg-light border-0 py-2" type="email" name="email" id="email" placeholder="Entrez votre adresse électronique" required="required">
+                          </div>
+                          <div class="mb-4">
+                            <label class="form-label visually-hidden" for="message">Entrez votre message <span class="text-danger">*</span></label>
+                            <textarea class="form-control bg-light border-0 py-2" rows="4" name="message" id="message" placeholder="Entrez votre message" required="required"></textarea>
+                          </div>
+                          <button class="btn btn-primary" type="submit">Envoyer le message</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </section>
+        </div>
+        <!-- Modal de résultat -->
+        <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="resultModalLabel">Message du serveur</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  {{ result }}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if result %}
+          <script>
+            window.addEventListener('load', function() {
+              var modalElement = document.getElementById('resultModal');
+              if(modalElement){
+                var myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
+              }
+            });
+          </script>
+          {% endif %}
+    </main>
+
+{% endblock %}

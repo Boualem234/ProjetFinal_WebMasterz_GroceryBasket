@@ -1,0 +1,5 @@
+Login pour le superuser
+
+	username : admin
+	courriel : admin@admin.com
+	mot de passe : admin

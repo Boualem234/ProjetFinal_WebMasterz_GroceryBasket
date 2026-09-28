@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Paiement - Commande {{ order.order_serial }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-receipt"></i> Résumé de la commande</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Numéro de commande :</strong> {{ order.order_serial }}</p>
+                    <p><strong>Date :</strong> {{ order.date|date:"d F Y à H:i" }}</p>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Produits</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-end">Prix unitaire</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.images.all %}
+                                            <div class="me-2" style="width: 60px; height: 60px; overflow: hidden; border-radius: 4px; flex-shrink: 0; background-color: #f8f9fa;">
+                                                <img src="{{ item.product.images.first.url.url }}" 
+                                                     alt="{{ item.product.name }}" 
+                                                     class="w-100 h-100" 
+                                                     style="object-fit: cover;">
+                                            </div>
+                                            {% endif %}
+                                            <span>{{ item.product.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-end">${{ item.price|floatformat:2 }}</td>
+                                    <td class="text-end">${{ item.total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 ms-auto">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-end"><strong>Sous-total :</strong></td>
+                                    <td class="text-end">${{ subtotal|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end"><strong>Taxes (TPS + TVQ) :</strong></td>
+                                    <td class="text-end">${{ taxes|floatformat:2 }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td class="text-end"><h5>Total :</h5></td>
+                                    <td class="text-end"><h5 class="text-primary">${{ total|floatformat:2 }}</h5></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0"><i class="bi bi-credit-card"></i> Paiement sécurisé</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Vous serez redirigé vers PayPal pour effectuer le paiement de manière sécurisée.
+                    </div>
+                    
+                    <div class="text-center mb-3">
+                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" 
+                             alt="PayPal" 
+                             class="img-fluid" 
+                             style="max-width: 150px;">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.render }}
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-check"></i> Paiement 100% sécurisé
+                        </small>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="{% url 'cart' %}" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-left"></i> Retour au panier
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mt-3">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-lock-fill text-success"></i> Paiement sécurisé</h6>
+                    <ul class="list-unstyled small mb-0">
+                        <li><i class="bi bi-check-circle text-success"></i> Cryptage SSL</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Protection des données</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Transactions sécurisées</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+form[action*="paypal"] {
+    margin: 0;
+}
+
+form[action*="paypal"] input[type="image"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+</style>
+{% endblock %}
